@@ -7,8 +7,8 @@ public class Exercise2_4 {
         Function<Integer, Integer> square = x -> x * x;
 
         Function<Function<Integer, Integer>,
-                Function<Function<Integer, Integer>,
-                        Function<Integer, Integer>>> compose = f1 -> f2 -> x -> f1.apply(f2.apply(x));
+                 Function<Function<Integer, Integer>,
+                          Function<Integer, Integer>>> compose = f1 -> f2 -> x -> f1.apply(f2.apply(x));
 
         Function<Integer, Integer> tripleItThenSquareIt = compose.apply(square).apply(triple);
 
