@@ -1,6 +1,6 @@
-package com.embosfer.fpinjava.chapter2;
+package com.thevalenciandev.fpinjava.chapter2;
 
-import static com.embosfer.fpinjava.chapter2.Exercise2_1.*;
+import static com.thevalenciandev.fpinjava.chapter2.Exercise2_1.*;
 
 public class OverflowStackByComposingFunctions {
 

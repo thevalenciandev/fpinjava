@@ -1,4 +1,4 @@
-package com.embosfer.fpinjava.chapter2;
+package com.thevalenciandev.fpinjava.chapter2;
 
 public class Exercise2_1 {
 

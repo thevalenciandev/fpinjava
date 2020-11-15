@@ -1,4 +1,4 @@
-package com.embosfer.fpinjava.chapter1;
+package com.thevalenciandev.fpinjava.chapter1;
 
 import org.junit.jupiter.api.Test;
 
