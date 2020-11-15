@@ -5,7 +5,7 @@ public class Exercise2_5 {
     static <T, U, V> Function<Function<U, V>,
                               Function<Function<T, U>,
                                        Function<T, V>>> higherCompose() {
-        return f1 -> f2 -> x -> f1.apply(f2.apply(x));
+        return f -> g -> x -> f.apply(g.apply(x));
     }
 
     public static void main(String[] args) {
