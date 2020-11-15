@@ -30,4 +30,12 @@ class FunctionsTest {
         assertEquals(f.apply(new Tuple<>(6, 6)), Functions.curry(f).apply(6).apply(6));
     }
 
+    @Test
+    void exercise_2_11_reverseFunctionArgs() {
+        Function<Double, Function<Double, Double>> addTax = x -> y -> x + x / 100 * y;
+        Function<Double, Function<Double, Double>> rvrsed = Functions.reverseArgs(addTax);
+
+        assertEquals(110.0, rvrsed.apply(10.0).apply(100.0));
+    }
+
 }
