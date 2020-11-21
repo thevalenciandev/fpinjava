@@ -23,25 +23,20 @@ public class EmailValidation {
     }
 
     static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$");
-    static final Function<String, Result> EMAIL_CHECKER = e -> {
-        if (e == null) {
-            return new Result.Failure("email must not be null");
-        } else if (e.length() == 0) {
-            return new Result.Failure("email must not be empty");
-        } else if (EMAIL_PATTERN.matcher(e).matches()) {
-            return new Result.Success();
-        } else {
-            return new Result.Failure("email " + e + " is invalid");
-        }
-    };
+    static final Function<String, Result> EMAIL_CHECKER = e ->
+        e == null
+            ? new Result.Failure("email must not be null")
+            : e.length() == 0
+                ? new Result.Failure("email must not be empty")
+                : EMAIL_PATTERN.matcher(e).matches()
+                    ? new Result.Success()
+                    : new Result.Failure("email " + e + " is invalid");
 
     public static Executable validate(String email) {
         Result result = EMAIL_CHECKER.apply(email);
-        if (result instanceof Result.Success) {
-            return () -> sendVerificationEmail(email);
-        } else {
-            return () -> logError(((Result.Failure) result).getErrorMessage());
-        }
+        return (result instanceof Result.Success)
+                ? () -> sendVerificationEmail(email)
+                : () -> logError(((Result.Failure) result).getErrorMessage());
     }
 
     private static void sendVerificationEmail(String email) {
