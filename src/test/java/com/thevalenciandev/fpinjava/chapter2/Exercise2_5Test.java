@@ -8,7 +8,7 @@ class Exercise2_5Test {
 
     @Test
     void canUseAnonymousFunctions() {
-        Double cosineOfTwo = Exercise2_5.<Double, Double, Double>higherCompose().apply(x -> Math.PI / 2 - x).apply(Math::sin).apply(2.0);
+        Double cosineOfTwo = Function.<Double, Double, Double>higherCompose().apply(x -> Math.PI / 2 - x).apply(Math::sin).apply(2.0);
         assertEquals(0.6614988999692148, cosineOfTwo);
     }
 

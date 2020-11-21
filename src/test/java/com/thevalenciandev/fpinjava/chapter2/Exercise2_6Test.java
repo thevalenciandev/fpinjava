@@ -11,7 +11,7 @@ class Exercise2_6Test {
         Function<Long, Double> f = a -> a + 2.0;
         Function<Double, Integer> g = a -> (int) (a * 3);
 
-        assertEquals(9, Exercise2_6.<Long, Double, Integer>higherAndThen().apply(f).apply(g).apply(1L));
+        assertEquals(9, Function.<Long, Double, Integer>higherAndThen().apply(f).apply(g).apply(1L));
     }
 
 }
