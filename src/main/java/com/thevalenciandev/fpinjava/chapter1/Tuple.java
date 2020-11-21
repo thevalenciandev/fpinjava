@@ -1,6 +1,6 @@
 package com.thevalenciandev.fpinjava.chapter1;
 
-public final class Tuple<T1, T2> {
+public class Tuple<T1, T2> {
 
     public final T1 _1;
     public final T2 _2;
