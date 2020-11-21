@@ -35,12 +35,12 @@ public class EmailValidation {
         }
     };
 
-    public static void validate(String email) {
+    public static Executable validate(String email) {
         Result result = EMAIL_CHECKER.apply(email);
         if (result instanceof Result.Success) {
-            sendVerificationEmail(email);
+            return () -> sendVerificationEmail(email);
         } else {
-            logError(((Result.Failure) result).getErrorMessage());
+            return () -> logError(((Result.Failure) result).getErrorMessage());
         }
     }
 
@@ -53,9 +53,9 @@ public class EmailValidation {
     }
 
     public static void main(String[] args) {
-        validate("this.is@my.email");
-        validate(null);
-        validate("");
-        validate("john.doe@acme.com");
+        validate("this.is@my.email").exec();
+        validate(null).exec();
+        validate("").exec();
+        validate("john.doe@acme.com").exec();
     }
 }
