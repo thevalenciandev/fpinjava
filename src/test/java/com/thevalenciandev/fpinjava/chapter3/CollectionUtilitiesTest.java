@@ -34,7 +34,7 @@ class CollectionUtilitiesTest {
        assertEquals(other, list);
        assertNotSame(other, list);
 
-       other.add(4);
+       other.add(4); // Check that modifying our copy of the list doesn't affect our immutable list
        assertNotEquals(other, list);
    }
 
@@ -44,6 +44,17 @@ class CollectionUtilitiesTest {
        assertEquals(List.of("one", "two"), list);
        assertThrows(UnsupportedOperationException.class, () -> list.add("two"));
    }
+
+    @Test
+    void testListOfVarArgs_WithArray() {
+        String[] elements = {"one", "two"};
+        List<String> list = CollectionUtilities.list(elements);
+        assertEquals(List.of("one", "two"), list);
+        assertThrows(UnsupportedOperationException.class, () -> list.add("two"));
+
+        elements[0] = "modified"; // Check that modifying the underlying array doesn't affect our immutable list
+        assertEquals(List.of("one", "two"), list);
+    }
 
     @Test
     void testMap() {
