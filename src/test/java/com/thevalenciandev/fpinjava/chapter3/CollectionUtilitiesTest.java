@@ -2,10 +2,7 @@ package com.thevalenciandev.fpinjava.chapter3;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 
 import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.map;
@@ -54,6 +51,32 @@ class CollectionUtilitiesTest {
 
         elements[0] = "modified"; // Check that modifying the underlying array doesn't affect our immutable list
         assertEquals(List.of("one", "two"), list);
+    }
+
+    @Test
+    void testHeadOfList() {
+        List<Float> list = makeMutableListOf(1.0f, 2.0f, 3.0f);
+        assertEquals(1.0f, CollectionUtilities.head(list));
+        assertEquals(List.of(1.0f, 2.0f, 3.0f), list);
+    }
+
+    @Test
+    void testHeadOfList_EmptyList() {
+        assertThrows(IllegalStateException.class, () -> CollectionUtilities.head(Collections.emptyList()));
+    }
+
+    @Test
+    void testTailOfList() {
+        List<Number> other = makeMutableListOf(1, 2, 3);
+        List<Number> tail = CollectionUtilities.tail(other);
+        assertEquals(List.of(2, 3), tail);
+        assertEquals(List.of(1, 2, 3), other); // Check original list has not been modified
+        assertThrows(UnsupportedOperationException.class, () -> tail.remove(0));
+    }
+
+    @Test
+    void testTailOfList_EmptyList() {
+        assertThrows(IllegalStateException.class, () -> CollectionUtilities.tail(Collections.emptyList()));
     }
 
     @Test
