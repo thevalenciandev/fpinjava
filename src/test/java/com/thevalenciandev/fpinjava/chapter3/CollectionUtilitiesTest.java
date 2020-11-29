@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.function.Function;
 
+import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.fold;
 import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.map;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -88,6 +89,13 @@ class CollectionUtilitiesTest {
         assertIsImmutable(append, 4);
         assertEquals(List.of(1, 2, 3), append);
         assertEquals(List.of(1, 2), other);
+    }
+    
+    @Test
+    void testFold() {
+        List<Integer> list = List.of(1, 2, 3, 4, 5);
+        assertEquals(15, fold(list, 0, x -> y -> x + y));
+        assertEquals(120, fold(list, 1, x -> y -> x * y));
     }
 
     @Test

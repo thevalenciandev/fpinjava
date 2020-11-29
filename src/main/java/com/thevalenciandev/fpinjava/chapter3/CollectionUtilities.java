@@ -53,6 +53,14 @@ public class CollectionUtilities {
         return Collections.unmodifiableList(copy);
     }
 
+    public static Integer fold(List<Integer> list, Integer identity, Function<Integer, Function<Integer, Integer>> f) {
+        Integer res = identity;
+        for (Integer elem : list) {
+            res = f.apply(res).apply(elem);
+        }
+        return res;
+    }
+
     public static <T, U> List<U> map(List<T> list, Function<T, U> f) {
         List<U> newList = new ArrayList<>();
         list.forEach(val -> newList.add(f.apply(val)));
