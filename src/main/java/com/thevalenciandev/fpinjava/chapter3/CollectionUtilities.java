@@ -38,8 +38,19 @@ public class CollectionUtilities {
         if (elements.isEmpty()) {
             throw new IllegalStateException("Tail of empty list");
         }
-        List<E> copy = list(elements);
-        return copy.subList(1, copy.size());
+        List<E> copy = copy(elements);
+        copy.remove(0);
+        return Collections.unmodifiableList(copy);
+    }
+
+    private static <E> List<E> copy(List<E> list) {
+        return new ArrayList<>(list);
+    }
+
+    public static <E> List<E> append(List<E> list, E element) {
+        List<E> copy = copy(list);
+        copy.add(element);
+        return Collections.unmodifiableList(copy);
     }
 
     public static <T, U> List<U> map(List<T> list, Function<T, U> f) {

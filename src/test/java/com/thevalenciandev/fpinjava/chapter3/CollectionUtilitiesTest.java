@@ -14,14 +14,14 @@ class CollectionUtilitiesTest {
     void testEmptyList() {
         List<Double> list = CollectionUtilities.list();
         assertEquals(Collections.emptyList(), list);
-        assertThrows(UnsupportedOperationException.class, () -> list.add(1.0));
+        assertIsImmutable(list, 1.0);
     }
 
     @Test
     void testListWithOneElement() {
         List<String> list = CollectionUtilities.list("one");
         assertEquals(List.of("one"), list);
-        assertThrows(UnsupportedOperationException.class, () -> list.add("two"));
+        assertIsImmutable(list, "two");
     }
 
    @Test
@@ -29,6 +29,7 @@ class CollectionUtilitiesTest {
        List<Integer> other = makeMutableListOf(1, 2, 3);
        List<Integer> list = CollectionUtilities.list(other);
        assertEquals(other, list);
+       assertIsImmutable(list, 4);
        assertNotSame(other, list);
 
        other.add(4); // Check that modifying our copy of the list doesn't affect our immutable list
@@ -39,7 +40,7 @@ class CollectionUtilitiesTest {
    void testListOfVarArgs() {
        List<String> list = CollectionUtilities.list("one", "two");
        assertEquals(List.of("one", "two"), list);
-       assertThrows(UnsupportedOperationException.class, () -> list.add("two"));
+       assertIsImmutable(list, "two");
    }
 
     @Test
@@ -47,7 +48,7 @@ class CollectionUtilitiesTest {
         String[] elements = {"one", "two"};
         List<String> list = CollectionUtilities.list(elements);
         assertEquals(List.of("one", "two"), list);
-        assertThrows(UnsupportedOperationException.class, () -> list.add("two"));
+        assertIsImmutable(list, "two");
 
         elements[0] = "modified"; // Check that modifying the underlying array doesn't affect our immutable list
         assertEquals(List.of("one", "two"), list);
@@ -69,6 +70,7 @@ class CollectionUtilitiesTest {
     void testTailOfList() {
         List<Number> other = makeMutableListOf(1, 2, 3);
         List<Number> tail = CollectionUtilities.tail(other);
+        assertIsImmutable(tail, 4);
         assertEquals(List.of(2, 3), tail);
         assertEquals(List.of(1, 2, 3), other); // Check original list has not been modified
         assertThrows(UnsupportedOperationException.class, () -> tail.remove(0));
@@ -77,6 +79,15 @@ class CollectionUtilitiesTest {
     @Test
     void testTailOfList_EmptyList() {
         assertThrows(IllegalStateException.class, () -> CollectionUtilities.tail(Collections.emptyList()));
+    }
+    
+    @Test
+    void testAppendToList() {
+        List<Integer> other = makeMutableListOf(1, 2);
+        List<Integer> append = CollectionUtilities.append(other, 3);
+        assertIsImmutable(append, 4);
+        assertEquals(List.of(1, 2, 3), append);
+        assertEquals(List.of(1, 2), other);
     }
 
     @Test
@@ -89,4 +100,9 @@ class CollectionUtilitiesTest {
     private <T> List<T> makeMutableListOf(T... elem) {
         return new ArrayList<>(Arrays.asList(elem));
     }
+
+    private <T> void assertIsImmutable(List<? super T> list, T elementToAdd) {
+        assertThrows(UnsupportedOperationException.class, () -> list.add(elementToAdd));
+    }
+
 }
