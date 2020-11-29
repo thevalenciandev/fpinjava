@@ -53,9 +53,9 @@ public class CollectionUtilities {
         return Collections.unmodifiableList(copy);
     }
 
-    public static Integer fold(List<Integer> list, Integer identity, Function<Integer, Function<Integer, Integer>> f) {
-        Integer res = identity;
-        for (Integer elem : list) {
+    public static <T, U> U foldLeft(List<T> list, U identity, Function<U, Function<T, U>> f) {
+        U res = identity;
+        for (T elem : list) {
             res = f.apply(res).apply(elem);
         }
         return res;

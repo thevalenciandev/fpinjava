@@ -5,22 +5,21 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.fold;
-import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.map;
+import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CollectionUtilitiesTest {
 
     @Test
     void testEmptyList() {
-        List<Double> list = CollectionUtilities.list();
+        List<Double> list = list();
         assertEquals(Collections.emptyList(), list);
         assertIsImmutable(list, 1.0);
     }
 
     @Test
     void testListWithOneElement() {
-        List<String> list = CollectionUtilities.list("one");
+        List<String> list = list("one");
         assertEquals(List.of("one"), list);
         assertIsImmutable(list, "two");
     }
@@ -28,7 +27,7 @@ class CollectionUtilitiesTest {
    @Test
    void testListFromCollectionOfElements() {
        List<Integer> other = makeMutableListOf(1, 2, 3);
-       List<Integer> list = CollectionUtilities.list(other);
+       List<Integer> list = list(other);
        assertEquals(other, list);
        assertIsImmutable(list, 4);
        assertNotSame(other, list);
@@ -39,7 +38,7 @@ class CollectionUtilitiesTest {
 
    @Test
    void testListOfVarArgs() {
-       List<String> list = CollectionUtilities.list("one", "two");
+       List<String> list = list("one", "two");
        assertEquals(List.of("one", "two"), list);
        assertIsImmutable(list, "two");
    }
@@ -47,7 +46,7 @@ class CollectionUtilitiesTest {
     @Test
     void testListOfVarArgs_WithArray() {
         String[] elements = {"one", "two"};
-        List<String> list = CollectionUtilities.list(elements);
+        List<String> list = list(elements);
         assertEquals(List.of("one", "two"), list);
         assertIsImmutable(list, "two");
 
@@ -58,19 +57,19 @@ class CollectionUtilitiesTest {
     @Test
     void testHeadOfList() {
         List<Float> list = makeMutableListOf(1.0f, 2.0f, 3.0f);
-        assertEquals(1.0f, CollectionUtilities.head(list));
+        assertEquals(1.0f, head(list));
         assertEquals(List.of(1.0f, 2.0f, 3.0f), list);
     }
 
     @Test
     void testHeadOfList_EmptyList() {
-        assertThrows(IllegalStateException.class, () -> CollectionUtilities.head(Collections.emptyList()));
+        assertThrows(IllegalStateException.class, () -> head(Collections.emptyList()));
     }
 
     @Test
     void testTailOfList() {
         List<Number> other = makeMutableListOf(1, 2, 3);
-        List<Number> tail = CollectionUtilities.tail(other);
+        List<Number> tail = tail(other);
         assertIsImmutable(tail, 4);
         assertEquals(List.of(2, 3), tail);
         assertEquals(List.of(1, 2, 3), other); // Check original list has not been modified
@@ -79,7 +78,7 @@ class CollectionUtilitiesTest {
 
     @Test
     void testTailOfList_EmptyList() {
-        assertThrows(IllegalStateException.class, () -> CollectionUtilities.tail(Collections.emptyList()));
+        assertThrows(IllegalStateException.class, () -> tail(Collections.emptyList()));
     }
     
     @Test
@@ -92,10 +91,13 @@ class CollectionUtilitiesTest {
     }
     
     @Test
-    void testFold() {
-        List<Integer> list = List.of(1, 2, 3, 4, 5);
-        assertEquals(15, fold(list, 0, x -> y -> x + y));
-        assertEquals(120, fold(list, 1, x -> y -> x * y));
+    void testFoldLeft() {
+        List<Integer> list = list(1, 2, 3, 4, 5);
+        assertEquals(15, foldLeft(list, 0, x -> y -> x + y));
+        assertEquals(120, foldLeft(list, 1, x -> y -> x * y));
+        // Test different types as well
+        Function<String, Function<Integer, String>> addStrings = s -> i -> "(" + s + " + " + i + ")";
+        assertEquals("(((((0 + 1) + 2) + 3) + 4) + 5)", foldLeft(list, "0", addStrings));
     }
 
     @Test
