@@ -61,6 +61,14 @@ public class CollectionUtilities {
         return res;
     }
 
+    public static <T, U> U foldRight(List<T> list, U identity, Function<T, Function<U, U>> f) {
+        U res = identity;
+        for (int i = list.size() - 1; i >= 0; i--) {
+            res = f.apply(list.get(i)).apply(res);
+        }
+        return res;
+    }
+
     public static <T, U> List<U> map(List<T> list, Function<T, U> f) {
         List<U> newList = new ArrayList<>();
         list.forEach(val -> newList.add(f.apply(val)));

@@ -84,7 +84,7 @@ class CollectionUtilitiesTest {
     @Test
     void testAppendToList() {
         List<Integer> other = makeMutableListOf(1, 2);
-        List<Integer> append = CollectionUtilities.append(other, 3);
+        List<Integer> append = append(other, 3);
         assertIsImmutable(append, 4);
         assertEquals(List.of(1, 2, 3), append);
         assertEquals(List.of(1, 2), other);
@@ -98,6 +98,16 @@ class CollectionUtilitiesTest {
         // Test different types as well
         Function<String, Function<Integer, String>> addStrings = s -> i -> "(" + s + " + " + i + ")";
         assertEquals("(((((0 + 1) + 2) + 3) + 4) + 5)", foldLeft(list, "0", addStrings));
+    }
+    
+    @Test
+    void testFoldRight() {
+        List<Integer> list = list(1, 2, 3, 4, 5);
+        assertEquals("(1 + (2 + (3 + (4 + (5 + 0)))))", foldRight(list, "0", x -> y -> addIS(x, y)));
+    }
+
+    private static String addIS(Integer x, String y) {
+        return "(" + x + " + " + y + ")";
     }
 
     @Test
