@@ -89,7 +89,16 @@ class CollectionUtilitiesTest {
         assertEquals(List.of(1, 2, 3), append);
         assertEquals(List.of(1, 2), other);
     }
-    
+
+    @Test
+    void testPrependToList() {
+        List<Integer> other = makeMutableListOf(1, 2);
+        List<Integer> append = prepend(other, 3);
+        assertIsImmutable(append, 4);
+        assertEquals(list(3, 1, 2), append);
+        assertEquals(list(1, 2), other);
+    }
+
     @Test
     void testFoldLeft() {
         List<Integer> list = list(1, 2, 3, 4, 5);
@@ -104,10 +113,16 @@ class CollectionUtilitiesTest {
     void testFoldRight() {
         List<Integer> list = list(1, 2, 3, 4, 5);
         assertEquals("(1 + (2 + (3 + (4 + (5 + 0)))))", foldRight(list, "0", x -> y -> addIS(x, y)));
+        assertEquals("(1 + (2 + (3 + (4 + (5 + 0)))))", foldRightRecNaive(list, "0", x -> y -> addIS(x, y)));
     }
 
     private static String addIS(Integer x, String y) {
         return "(" + x + " + " + y + ")";
+    }
+
+    @Test
+    void testReverse() {
+        assertEquals(list(5, 4, 3, 2, 1), reverse(list(1, 2, 3, 4, 5)));
     }
 
     @Test

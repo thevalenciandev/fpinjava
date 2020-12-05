@@ -53,6 +53,10 @@ public class CollectionUtilities {
         return Collections.unmodifiableList(copy);
     }
 
+    public static <E> List<E> prepend(List<E> list, E element) {
+        return foldLeft(list, list(element), a -> b -> append(a, b));
+    }
+
     public static <T, U> U foldLeft(List<T> list, U identity, Function<U, Function<T, U>> f) {
         U res = identity;
         for (T elem : list) {
@@ -67,6 +71,17 @@ public class CollectionUtilities {
             res = f.apply(list.get(i)).apply(res);
         }
         return res;
+    }
+
+    // Naive impl.: will work for at least 5000 elements
+    public static <T, U> U foldRightRecNaive(List<T> list, U identity, Function<T, Function<U, U>> f) {
+        return list.isEmpty()
+                ? identity
+                : f.apply(head(list)).apply(foldRightRecNaive(tail(list), identity, f));
+    }
+
+    public static <E> List<E> reverse(List<E> list) {
+        return foldLeft(list, list(), a -> b -> prepend(a, b));
     }
 
     public static <T, U> List<U> map(List<T> list, Function<T, U> f) {
