@@ -112,4 +112,14 @@ public class CollectionUtilities {
         }
         return res;
     }
+
+    public static <T> List<T> unfold(T seed, Function<T, T> f, Function<T, Boolean> p) {
+        List<T> res = new ArrayList<>();
+        T condition = seed;
+        while (p.apply(condition)) {
+            res = append(res, condition);
+            condition = f.apply(condition);
+        }
+        return res;
+    }
 }

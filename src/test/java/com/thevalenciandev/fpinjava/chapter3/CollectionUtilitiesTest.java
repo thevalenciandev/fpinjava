@@ -147,6 +147,11 @@ class CollectionUtilitiesTest {
     void testRange() {
         assertEquals(list(1, 2, 3), range(1, 4));
     }
+    
+    @Test
+    void testUnfold() {
+        assertEquals(list(1, 2, 3), unfold(1, x -> x + 1, x -> x < 4));
+    }
 
     private <T> List<T> makeMutableListOf(T... elem) {
         return new ArrayList<>(Arrays.asList(elem));
