@@ -1,9 +1,7 @@
 package com.thevalenciandev.fpinjava.chapter3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -97,5 +95,11 @@ public class CollectionUtilities {
 
     public static <T, U> List<U> mapViaFoldRight(List<T> list, Function<T, U> f) {
         return foldRight(list, list(), x -> y -> prepend(y, f.apply(x)));
+    }
+
+    public static <T> void forEach(Collection<T> col, Consumer<T> effect) {
+        for (T e : col) {
+            effect.accept(e);
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.thevalenciandev.fpinjava.chapter3;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.*;
@@ -132,6 +133,14 @@ class CollectionUtilitiesTest {
         assertEquals(list(1.2, 2.4), map(integers, addTwentyPercent));
         assertEquals(list(1.2, 2.4), mapViaFoldLeft(integers, addTwentyPercent));
         assertEquals(list(1.2, 2.4), mapViaFoldRight(integers, addTwentyPercent));
+    }
+
+    @Test
+    void testForEach() {
+        List<Integer> list = list(1, 2, 3);
+        AtomicInteger count = new AtomicInteger(0);
+        forEach(list, i -> count.incrementAndGet());
+        assertEquals(3, count.get());
     }
 
     private <T> List<T> makeMutableListOf(T... elem) {
