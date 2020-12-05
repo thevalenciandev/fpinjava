@@ -129,7 +129,9 @@ class CollectionUtilitiesTest {
     void testMap() {
         List<Integer> integers = List.of(1, 2);
         Function<Integer, Double> addTwentyPercent = x -> x * 1.2d;
-        assertEquals(List.of(1.2, 2.4), map(integers, addTwentyPercent));
+        assertEquals(list(1.2, 2.4), map(integers, addTwentyPercent));
+        assertEquals(list(1.2, 2.4), mapViaFoldLeft(integers, addTwentyPercent));
+        assertEquals(list(1.2, 2.4), mapViaFoldRight(integers, addTwentyPercent));
     }
 
     private <T> List<T> makeMutableListOf(T... elem) {

@@ -23,6 +23,7 @@ public class CollectionUtilities {
         return Collections.unmodifiableList(new ArrayList<>(other));
     }
 
+    @SafeVarargs
     public static <E> List<E> list(E... elements) {
         return Collections.unmodifiableList(Arrays.asList(Arrays.copyOf(elements, elements.length)));
     }
@@ -90,4 +91,11 @@ public class CollectionUtilities {
         return newList;
     }
 
+    public static <T, U> List<U> mapViaFoldLeft(List<T> list, Function<T, U> f) {
+        return foldLeft(list, list(), x -> y -> append(x, f.apply(y)));
+    }
+
+    public static <T, U> List<U> mapViaFoldRight(List<T> list, Function<T, U> f) {
+        return foldRight(list, list(), x -> y -> prepend(y, f.apply(x)));
+    }
 }
