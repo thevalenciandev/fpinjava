@@ -143,6 +143,11 @@ class CollectionUtilitiesTest {
         assertEquals(3, count.get());
     }
 
+    @Test
+    void testRange() {
+        assertEquals(list(1, 2, 3), range(1, 4));
+    }
+
     private <T> List<T> makeMutableListOf(T... elem) {
         return new ArrayList<>(Arrays.asList(elem));
     }

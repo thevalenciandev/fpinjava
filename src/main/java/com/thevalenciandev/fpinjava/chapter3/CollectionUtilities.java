@@ -102,4 +102,14 @@ public class CollectionUtilities {
             effect.accept(e);
         }
     }
+
+    public static List<Integer> range(int start, int end) {
+        List<Integer> res = new ArrayList<>();
+        int count = start;
+        while (count < end) {
+            res = append(res, count);
+            count++;
+        }
+        return res;
+    }
 }
