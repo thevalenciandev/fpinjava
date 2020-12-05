@@ -1,10 +1,10 @@
 package com.thevalenciandev.fpinjava.chapter3;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.list;
-import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.map;
+import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.*;
 
 public class ComposingMappings {
 
@@ -22,5 +22,18 @@ public class ComposingMappings {
 
         List<Double> pricesWithTaxAndShipment2 = map(prices, addTax.andThen(addShipping));
         System.out.println(pricesWithTaxAndShipment2);
+
+        Consumer<Double> printWith2Decimals = d -> {
+            System.out.printf("%.2f", d);
+            System.out.println();
+        };
+        Function<Runnable, Function<Runnable, Runnable>> compose = x -> y -> () -> {
+            x.run();
+            y.run();
+        };
+        Runnable ez = () -> {};
+        Runnable program = foldLeft(pricesIncludingShipping, ez,
+                e -> d -> compose.apply(e).apply(() -> printWith2Decimals.accept(d)));
+        program.run();
     }
 }
