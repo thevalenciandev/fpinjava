@@ -46,14 +46,14 @@ public class CollectionUtilities {
         return new ArrayList<>(list);
     }
 
-    public static <E> List<E> append(List<E> list, E element) {
+    public static <E> List<E> append(E element, List<E> list) {
         List<E> copy = copy(list);
         copy.add(element);
         return Collections.unmodifiableList(copy);
     }
 
-    public static <E> List<E> prepend(List<E> list, E element) {
-        return foldLeft(list, list(element), a -> b -> append(a, b));
+    public static <E> List<E> prepend(E element, List<E> list) {
+        return foldLeft(list, list(element), a -> b -> append(b, a));
     }
 
     public static <T, U> U foldLeft(List<T> list, U identity, Function<U, Function<T, U>> f) {
@@ -80,7 +80,7 @@ public class CollectionUtilities {
     }
 
     public static <E> List<E> reverse(List<E> list) {
-        return foldLeft(list, list(), a -> b -> prepend(a, b));
+        return foldLeft(list, list(), a -> b -> prepend(b, a));
     }
 
     public static <T, U> List<U> map(List<T> list, Function<T, U> f) {
@@ -90,11 +90,11 @@ public class CollectionUtilities {
     }
 
     public static <T, U> List<U> mapViaFoldLeft(List<T> list, Function<T, U> f) {
-        return foldLeft(list, list(), x -> y -> append(x, f.apply(y)));
+        return foldLeft(list, list(), x -> y -> append(f.apply(y), x));
     }
 
     public static <T, U> List<U> mapViaFoldRight(List<T> list, Function<T, U> f) {
-        return foldRight(list, list(), x -> y -> prepend(y, f.apply(x)));
+        return foldRight(list, list(), x -> y -> prepend(f.apply(x), y));
     }
 
     public static <T> void forEach(Collection<T> col, Consumer<T> effect) {
@@ -104,20 +104,20 @@ public class CollectionUtilities {
     }
 
     public static List<Integer> range(int start, int end) {
-        List<Integer> res = new ArrayList<>();
-        int count = start;
-        while (count < end) {
-            res = append(res, count);
-            count++;
-        }
-        return res;
+        return unfold(start, x -> x + 1, x -> x < end);
+    }
+
+    public static List<Integer> rangeRec(int start, int end) {
+        return start == end
+                ? list()
+                : prepend(start, rangeRec(start + 1, end));
     }
 
     public static <T> List<T> unfold(T seed, Function<T, T> f, Function<T, Boolean> p) {
         List<T> res = new ArrayList<>();
         T condition = seed;
         while (p.apply(condition)) {
-            res = append(res, condition);
+            res = append(condition, res);
             condition = f.apply(condition);
         }
         return res;

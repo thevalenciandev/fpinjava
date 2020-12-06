@@ -85,7 +85,7 @@ class CollectionUtilitiesTest {
     @Test
     void testAppendToList() {
         List<Integer> other = makeMutableListOf(1, 2);
-        List<Integer> append = append(other, 3);
+        List<Integer> append = append(3, other);
         assertIsImmutable(append, 4);
         assertEquals(List.of(1, 2, 3), append);
         assertEquals(List.of(1, 2), other);
@@ -94,7 +94,7 @@ class CollectionUtilitiesTest {
     @Test
     void testPrependToList() {
         List<Integer> other = makeMutableListOf(1, 2);
-        List<Integer> append = prepend(other, 3);
+        List<Integer> append = prepend(3, other);
         assertIsImmutable(append, 4);
         assertEquals(list(3, 1, 2), append);
         assertEquals(list(1, 2), other);
@@ -146,6 +146,7 @@ class CollectionUtilitiesTest {
     @Test
     void testRange() {
         assertEquals(list(1, 2, 3), range(1, 4));
+        assertEquals(list(1, 2, 3), rangeRec(1, 4));
     }
     
     @Test
