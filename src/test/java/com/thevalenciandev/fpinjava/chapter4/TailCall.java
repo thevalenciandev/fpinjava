@@ -4,17 +4,17 @@ import java.util.function.Supplier;
 
 public abstract class TailCall<T> {
 
+    private TailCall() {}
+
     public abstract TailCall<T> resume();
-
     public abstract T eval();
-
     public abstract boolean isSuspend();
 
-    public static class Return<T> extends TailCall<T> {
+    private static class Return<T> extends TailCall<T> {
 
         private final T t;
 
-        public Return(T t) {
+        private Return(T t) {
             this.t = t;
         }
 
@@ -34,11 +34,11 @@ public abstract class TailCall<T> {
         }
     }
 
-    public static class Suspend<T> extends TailCall<T> {
+    private static class Suspend<T> extends TailCall<T> {
 
         private final Supplier<TailCall<T>> resume;
 
-        public Suspend(Supplier<TailCall<T>> resume) {
+        private Suspend(Supplier<TailCall<T>> resume) {
             this.resume = resume;
         }
 
@@ -60,6 +60,14 @@ public abstract class TailCall<T> {
         public boolean isSuspend() {
             return true;
         }
+    }
+
+    public static <T> Return<T> ret(T t) {
+        return new Return<>(t);
+    }
+
+    public static <T> Suspend<T> sus(Supplier<TailCall<T>> s) {
+        return new Suspend<>(s);
     }
 
 }

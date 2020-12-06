@@ -3,6 +3,8 @@ package com.thevalenciandev.fpinjava.chapter4;
 import java.util.List;
 
 import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.*;
+import static com.thevalenciandev.fpinjava.chapter4.TailCall.ret;
+import static com.thevalenciandev.fpinjava.chapter4.TailCall.sus;
 
 public class Recursion {
 
@@ -12,10 +14,14 @@ public class Recursion {
                 : add(++x, --y);
     }
 
-    static TailCall<Integer> addTailCall(int x, int y) {
+    static int addTailCall(int x, int y) {
+        return addTailCallRec(x, y).eval();
+    }
+
+    private static TailCall<Integer> addTailCallRec(int x, int y) {
         return y == 0
-                ? new TailCall.Return<>(x)
-                : new TailCall.Suspend<>(() -> addTailCall(x + 1, y - 1));
+                ? ret(x)
+                : sus((() -> addTailCallRec(x + 1, y - 1)));
     }
 
     static int sum(List<Integer> list) {
@@ -36,7 +42,7 @@ public class Recursion {
 
     public static void main(String[] args) {
         System.out.println(add(3, 10000));
-        System.out.println(addTailCall(3, 100000000).eval());
+        System.out.println(addTailCall(3, 100000000));
         System.out.println(sum(list(1, 2, 3)));
         System.out.println(sumTail(list(1, 2, 3)));
     }
