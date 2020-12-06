@@ -41,15 +41,19 @@ public class Recursion {
                 : sumTailHelper(tail(list), acc + head(list));
     }
 
-    static Function<Integer, Function<Integer, TailCall<Integer>>> ADD =
-            x -> y -> y == 0
-                    ? ret(x)
-                    : sus(() -> Recursion.ADD.apply(x + 1).apply(y - 1));
+    static Function<Integer, Function<Integer, Integer>> ADD = x -> y -> {
+        class AddHelper {
+            final Function<Integer, Function<Integer, TailCall<Integer>>> addHelper = a -> b -> b == 0
+                    ? ret(a)
+                    : sus(() -> this.addHelper.apply(a + 1).apply(b - 1));
+        }
+        return new AddHelper().addHelper.apply(x).apply(y).eval();
+    };
 
     public static void main(String[] args) {
         System.out.println(add(3, 10000));
         System.out.println(addTailCall(3, 1000000));
-        System.out.println(ADD.apply(3).apply(10000).eval());
+        System.out.println(ADD.apply(3).apply(10000));
         System.out.println(sum(list(1, 2, 3)));
         System.out.println(sumTail(list(1, 2, 3)));
     }
