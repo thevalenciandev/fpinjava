@@ -1,6 +1,7 @@
 package com.thevalenciandev.fpinjava.chapter4;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.*;
 import static com.thevalenciandev.fpinjava.chapter4.TailCall.ret;
@@ -40,9 +41,15 @@ public class Recursion {
                 : sumTailHelper(tail(list), acc + head(list));
     }
 
+    static Function<Integer, Function<Integer, TailCall<Integer>>> ADD =
+            x -> y -> y == 0
+                    ? ret(x)
+                    : sus(() -> Recursion.ADD.apply(x + 1).apply(y - 1));
+
     public static void main(String[] args) {
         System.out.println(add(3, 10000));
-        System.out.println(addTailCall(3, 100000000));
+        System.out.println(addTailCall(3, 1000000));
+        System.out.println(ADD.apply(3).apply(10000).eval());
         System.out.println(sum(list(1, 2, 3)));
         System.out.println(sumTail(list(1, 2, 3)));
     }
