@@ -1,6 +1,7 @@
 package com.thevalenciandev.fpinjava.chapter3;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.foldLeft;
 import static com.thevalenciandev.fpinjava.chapter3.CollectionUtilities.list;
@@ -10,6 +11,7 @@ public class Store {
     record Price(double value) {
 
         public static final Price ZERO = new Price(0.0);
+        public static final Function<Weight, Function<OrderLine, Weight>> SUM = x -> y -> x.add(y.weight());
 
         public Price add(Price that) {
             return new Price(this.value + that.value);
@@ -24,6 +26,7 @@ public class Store {
     record Weight(double value) {
 
         public static final Weight ZERO = new Weight(0.0);
+        public static final Function<Price, Function<OrderLine, Price>> SUM = x -> y -> x.add(y.amount());
 
         public Weight add(Weight that) {
             return new Weight(this.value + that.value);
@@ -55,8 +58,8 @@ public class Store {
                 new OrderLine(toothPaste, 2),
                 new OrderLine(toothBrush, 3));
 
-        Weight weight = foldLeft(order, Weight.ZERO, x -> y -> x.add(y.weight()));
-        Price price = foldLeft(order, Price.ZERO, x -> y -> x.add(y.amount()));
+        Weight weight = foldLeft(order, Weight.ZERO, Price.SUM);
+        Price price = foldLeft(order, Price.ZERO, Weight.SUM);
 
         System.out.println(String.format("Total weight: %s", weight));
         System.out.println(String.format("Total price: %s", price));
