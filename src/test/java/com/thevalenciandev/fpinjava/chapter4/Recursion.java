@@ -12,6 +12,12 @@ public class Recursion {
                 : add(++x, --y);
     }
 
+    static TailCall<Integer> addTailCall(int x, int y) {
+        return y == 0
+                ? new TailCall.Return<>(x)
+                : new TailCall.Suspend<>(() -> addTailCall(x + 1, y - 1));
+    }
+
     static int sum(List<Integer> list) {
         return list.isEmpty()
                 ? 0
@@ -30,6 +36,7 @@ public class Recursion {
 
     public static void main(String[] args) {
         System.out.println(add(3, 10000));
+        System.out.println(addTailCall(3, 100000000).eval());
         System.out.println(sum(list(1, 2, 3)));
         System.out.println(sumTail(list(1, 2, 3)));
     }
