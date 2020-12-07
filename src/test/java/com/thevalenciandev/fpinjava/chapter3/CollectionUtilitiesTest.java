@@ -105,6 +105,7 @@ class CollectionUtilitiesTest {
         List<Integer> list = list(1, 2, 3, 4, 5);
         assertEquals(15, foldLeft(list, 0, x -> y -> x + y));
         assertEquals(120, foldLeft(list, 1, x -> y -> x * y));
+        assertEquals(120, foldLeftTailRec(list, 1, x -> y -> x * y));
         // Test different types as well
         Function<String, Function<Integer, String>> addStrings = s -> i -> "(" + s + " + " + i + ")";
         assertEquals("(((((0 + 1) + 2) + 3) + 4) + 5)", foldLeft(list, "0", addStrings));

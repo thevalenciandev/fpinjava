@@ -1,8 +1,13 @@
 package com.thevalenciandev.fpinjava.chapter3;
 
+import com.thevalenciandev.fpinjava.chapter4.TailCall;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import static com.thevalenciandev.fpinjava.chapter4.TailCall.ret;
+import static com.thevalenciandev.fpinjava.chapter4.TailCall.sus;
 
 /**
  * This is less useful on newer versions of Java containing the List.of API
@@ -62,6 +67,16 @@ public class CollectionUtilities {
             res = f.apply(res).apply(elem);
         }
         return res;
+    }
+
+    public static <T, U> U foldLeftTailRec(List<T> list, U identity, Function<U, Function<T, U>> f) {
+        return foldLeft_(list, identity, f).eval();
+    }
+
+    private static <T, U> TailCall<U> foldLeft_(List<T> list, U acc, Function<U, Function<T, U>> f) {
+        return list.isEmpty()
+                ? ret(acc)
+                : sus(() -> foldLeft_(tail(list), f.apply(acc).apply(head(list)), f));
     }
 
     public static <T, U> U foldRight(List<T> list, U identity, Function<T, Function<U, U>> f) {
