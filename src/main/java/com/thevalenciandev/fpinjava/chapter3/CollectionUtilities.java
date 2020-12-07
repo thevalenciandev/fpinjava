@@ -94,6 +94,16 @@ public class CollectionUtilities {
                 : f.apply(head(list)).apply(foldRightRecNaive(tail(list), identity, f));
     }
 
+    public static <T, U> U foldRightTailRec(List<T> list, U identity, Function<T, Function<U, U>> f) {
+        return foldRight_(reverse(list), identity, f).eval();
+    }
+
+    private static <T, U> TailCall<U> foldRight_(List<T> list, U acc, Function<T, Function<U, U>> f) {
+        return list.isEmpty()
+                ? ret(acc)
+                : sus(() -> foldRight_(tail(list), f.apply(head(list)).apply(acc), f));
+    }
+
     public static <E> List<E> reverse(List<E> list) {
         return foldLeft(list, list(), a -> b -> prepend(b, a));
     }
@@ -126,6 +136,16 @@ public class CollectionUtilities {
         return start == end
                 ? list()
                 : prepend(start, rangeRec(start + 1, end));
+    }
+
+    public static List<Integer> rangeTailRec(int start, int end) {
+        return range_(start, end, list()).eval();
+    }
+
+    private static TailCall<List<Integer>> range_(int start, int end, List<Integer> acc) {
+        return start == end
+                ? ret(acc)
+                : sus(() -> range_(start + 1, end, append(start, acc)));
     }
 
     public static <T> List<T> unfold(T seed, Function<T, T> f, Function<T, Boolean> p) {

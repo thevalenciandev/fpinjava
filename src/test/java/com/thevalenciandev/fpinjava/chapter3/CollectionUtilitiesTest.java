@@ -116,6 +116,7 @@ class CollectionUtilitiesTest {
         List<Integer> list = list(1, 2, 3, 4, 5);
         assertEquals("(1 + (2 + (3 + (4 + (5 + 0)))))", foldRight(list, "0", x -> y -> addIS(x, y)));
         assertEquals("(1 + (2 + (3 + (4 + (5 + 0)))))", foldRightRecNaive(list, "0", x -> y -> addIS(x, y)));
+        assertEquals("(1 + (2 + (3 + (4 + (5 + 0)))))", foldRightTailRec(list, "0", x -> y -> addIS(x, y)));
     }
 
     private static String addIS(Integer x, String y) {
@@ -148,6 +149,7 @@ class CollectionUtilitiesTest {
     void testRange() {
         assertEquals(list(1, 2, 3), range(1, 4));
         assertEquals(list(1, 2, 3), rangeRec(1, 4));
+        assertEquals(list(1, 2, 3), rangeTailRec(1, 4));
     }
     
     @Test
