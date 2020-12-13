@@ -157,4 +157,9 @@ public class CollectionUtilities {
         }
         return res;
     }
+
+    public static <T, U> Function<T, T> composeAll(List<Function<T, T>> fs) {
+        return foldRightTailRec(fs, Function.identity(), f -> g -> f.compose(g));
+    }
+
 }

@@ -157,6 +157,13 @@ class CollectionUtilitiesTest {
         assertEquals(list(1, 2, 3), unfold(1, x -> x + 1, x -> x < 4));
     }
 
+    @Test
+    void testComposeAll() {
+        Function<Integer, Integer> add = y -> y + 1;
+        List<Function<Integer, Integer>> fs = map(range(0, 500), x -> add);
+        assertEquals(500, composeAll(fs).apply(0));
+    }
+
     private <T> List<T> makeMutableListOf(T... elem) {
         return new ArrayList<>(Arrays.asList(elem));
     }
